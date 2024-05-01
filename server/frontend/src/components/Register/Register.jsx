@@ -4,6 +4,7 @@ import user_icon from "../assets/person.png";
 import email_icon from "../assets/email.png";
 import password_icon from "../assets/password.png";
 import close_icon from "../assets/close.png";
+
 const Register = () => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -14,6 +15,7 @@ const Register = () => {
   const gohome = () => {
     window.location.href = window.location.origin;
   };
+
   const register = async (e) => {
     e.preventDefault();
     let register_url = window.location.origin + "/djangoapp/register";
@@ -31,6 +33,7 @@ const Register = () => {
         email: email,
       }),
     });
+
     const json = await res.json();
     if (json.status) {
       sessionStorage.setItem("username", json.userName);
@@ -40,6 +43,7 @@ const Register = () => {
       window.location.href = window.location.origin;
     }
   };
+
   return (
     <div className="register_container" style={{ width: "50%" }}>
       <div
