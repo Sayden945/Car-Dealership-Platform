@@ -1,10 +1,12 @@
-from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponse
+# from django.shortcuts import render
+# from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404, render, redirect
+
+# from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import logout
-from django.contrib import messages
-from datetime import datetime
+
+# from django.contrib import messages
+# from datetime import datetime
 
 from django.http import JsonResponse
 from django.contrib.auth import login, authenticate
@@ -50,7 +52,7 @@ def logout_request(request):
 # `registration` view to handle sign up request
 @csrf_exempt
 def registration(request):
-    context = {}
+    # context = {}
     data = json.loads(request.body)
     username = data["userName"]
     password = data["password"]
@@ -58,7 +60,7 @@ def registration(request):
     last_name = data["lastName"]
     email = data["email"]
     username_taken = False
-    email_taken = False
+    # email_taken = False
 
     try:
         # Check if username exists, if so set username_taken to true
@@ -66,9 +68,9 @@ def registration(request):
             username=username,
         )
         username_taken = True
-    except:
+    except Exception as e:
         # Log in as new user
-        logger.debug("{} is a new user".format(username))
+        logger.debug("{} is a new user".format(username) + e)
 
     if not username_taken:
         # Create new user
@@ -126,15 +128,13 @@ def get_dealer_details(request, dealer_id):
 
 # `add_review` view to submit a review
 def add_review(request):
-    if request.user.is_anonymouse == False:
+    if not request.user.is_anonymous:
         data = json.loads(request.body)
         try:
             response = post_review(data)
-            return JsonResponse({"status": 200})
-        except:
-            return JsonResponse(
-                {"status": 401, "message": "Error posting review"}
-            )
+            return JsonResponse({"status": 200, "message": response})
+        except Exception as e:
+            return JsonResponse({"status": 401, "message": e})
     else:
         return JsonResponse({"status": 403, "message": "Unauthorized"})
 
